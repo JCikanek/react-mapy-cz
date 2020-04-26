@@ -87,7 +87,7 @@ class MapCmp extends React.Component {
         return marks
             .filter(it => it.onPointerClick)
             .map((it, index) => <Pointer sMap={sMap} key={index + "-" + it.x + "-" + it.y}
-                                                x={it.x} y={it.y} onPointerClick={it.onPointerClick}/>)
+                                         x={it.x} y={it.y} onPointerClick={it.onPointerClick}/>)
     }
 
 
@@ -99,12 +99,19 @@ class MapCmp extends React.Component {
     }
 
     render() {
-        const {marks, paths, centerCoords} = this.props;
+        const {marks, paths, centerCoords, computeCenter} = this.props;
         const {sMap} = this.state;
+        const {SMap} = window;
 
-        if (sMap) {
-            const center = window.SMap.Coords.fromWGS84(centerCoords[0], centerCoords[1]);
+        if (sMap && !computeCenter) {
+            const center = SMap.Coords.fromWGS84(centerCoords[0], centerCoords[1]);
             sMap.setCenter(center);
+        }
+
+        if (sMap && computeCenter) {
+            const points = (marks || []).map(it => SMap.Coords.fromWGS84(it.x, it.y));
+            const rest = sMap.computeCenterZoom(points);
+             sMap.setCenterZoom(...rest,true);
         }
 
         return (

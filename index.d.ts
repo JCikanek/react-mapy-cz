@@ -26,6 +26,7 @@ export interface AppProps {
     marks: MarkerPoint[];
     width?: string;
     height?: string
+    computeCenter?: boolean;
 }
 
 
