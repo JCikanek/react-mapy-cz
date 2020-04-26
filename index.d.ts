@@ -31,7 +31,4 @@ export interface AppProps {
 
 
 export declare const MapCz: React.FC<AppProps>;
-export default MapCz;
-
-
-//  export default function(ss):React.PureComponent<AppProps, {}>
+//export default MapCz;
