@@ -18,10 +18,11 @@ const MapCz = (props) => {
         }
     }
 
-    const {width, height, zoom, center, marks} = props;
+    const {width, height, zoom, center, marks, computeCenter} = props;
     const w = width || defaultProps.width;
     const h = height || defaultProps.height;
     const c = center || defaultProps.center;
+    const cmpCenter = computeCenter!==undefined
 
 
     // const { marks, paths} = this.props;
@@ -30,7 +31,9 @@ const MapCz = (props) => {
             {<Map onPointAdded={onMapClick}
                   zoom={zoom || defaultProps.zoom}
                   centerCoords={[c.x, c.y]}
-                  marks={marks}/>}
+                  marks={marks}
+                  computeCenter={cmpCenter}/>}
+
         </div>
     );
 }
