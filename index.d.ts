@@ -2,7 +2,12 @@ import * as React from 'react';
 
 export interface MapPoint {
     x: number;
-    y: number
+    y: number;
+}
+
+
+export interface MapCenterPoint extends MapPoint{
+    force?:boolean;
 }
 
 export enum MarkerColor {
@@ -10,9 +15,7 @@ export enum MarkerColor {
     Green = "green"
 }
 
-export interface MarkerPoint {
-    x: number;
-    y: number;
+export interface MarkerPoint extends MapPoint {
     value?: string;
     markerImg?: string;
     onPointerClick?: (x: number, y: number) => void;
@@ -20,9 +23,9 @@ export interface MarkerPoint {
 
 
 export interface AppProps {
-    onMapClick?: (coords: any) => void;
+    onMapClick?: (coords: MapPoint) => void;
     zoom: number,
-    center: MapPoint;
+    center: MapCenterPoint;
     marks: MarkerPoint[];
     width?: string;
     height?: string

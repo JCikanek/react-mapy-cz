@@ -30,7 +30,7 @@ const MapCz = (props) => {
         <div style={{width: w, height: h, border: "solid gray 1px"}}>
             {<Map onPointAdded={onMapClick}
                   zoom={zoom || defaultProps.zoom}
-                  centerCoords={[c.x, c.y]}
+                  centerCoords={c}
                   marks={marks}
                   computeCenter={cmpCenter}/>}
 

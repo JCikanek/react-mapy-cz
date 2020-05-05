@@ -9,6 +9,11 @@ import Path from "./Path";
 import Pointer from "./Pointer";
 
 class MapCmp extends React.Component {
+    lastState = {
+        lastCenter: {x:0, y:0},
+        lastZoom: -1,
+        lastComputedCenter: {}
+    }
 
     constructor(props) {
         super(props);
@@ -16,9 +21,6 @@ class MapCmp extends React.Component {
         this.state = {
             sMap: undefined,
             markerLayer: undefined,
-            lastCenter: undefined,
-            lastZoom: undefined,
-            lastComputedCenter: {}
         };
     }
 
@@ -28,10 +30,58 @@ class MapCmp extends React.Component {
         }
     }
 
+    componentDidUpdate(nextProps) {
+        const {marks, centerCoords, computeCenter, zoom} = nextProps;
+        const {sMap} = this.state;
+        const {lastCenter, lastZoom, lastComputedCenter} = this.lastState;
+        const {SMap} = window;
+
+        if (!sMap) {
+            return true;
+        }
+
+        const updateNonComputeCenter =()=>{
+            const newCenter = SMap.Coords.fromWGS84(centerCoords.x, centerCoords.y);
+            if (lastCenter.x !== newCenter.x || lastCenter.y !== newCenter.y || centerCoords.force) {
+                sMap.setCenter(newCenter, true);
+                this.lastState = {...this.lastState, lastCenter: newCenter};
+            }
+
+            if (lastZoom !== zoom) {
+                sMap.setZoom(zoom, true);
+                this.lastState = {...this.lastState, lastZoom: zoom};
+            }
+        }
+
+        const updateComputeCenter =()=>{
+            const points = (marks || []).map(it => SMap.Coords.fromWGS84(it.x, it.y));
+            const rest = sMap.computeCenterZoom(points);
+            const newCenter = rest[0];
+
+            if (lastComputedCenter.center.x !== newCenter.x ||
+                lastComputedCenter.center.y !== newCenter.y ||
+                lastComputedCenter.zoom !== rest[1]) {
+
+                sMap.setCenterZoom(...rest, true);
+                this.lastState = {
+                    ...this.lastState, lastComputedCenter: {center: newCenter, zoom: rest[1]}
+                }
+            }
+        }
+
+        if (computeCenter) {
+            updateComputeCenter();
+        } else{
+            updateNonComputeCenter();
+        }
+
+        return true;
+    }
+
     initiateMap(node) {
         const {centerCoords, zoom} = this.props;
 
-        const center = window.SMap.Coords.fromWGS84(centerCoords[0], centerCoords[1]);
+        const center = window.SMap.Coords.fromWGS84(centerCoords.x, centerCoords.y);
 
         const sMap = new window.SMap(node, center, zoom);
         sMap.addDefaultLayer(BaseLayers.TURIST).enable();
@@ -81,7 +131,6 @@ class MapCmp extends React.Component {
                                                 value={it.value}/>)
     }
 
-
     renderPointers(marks) {
         if (!marks) {
             return undefined;
@@ -93,7 +142,6 @@ class MapCmp extends React.Component {
                                          x={it.x} y={it.y} onPointerClick={it.onPointerClick}/>)
     }
 
-
     renderPaths(paths) {
         if (!paths) {
             return undefined;
@@ -101,42 +149,9 @@ class MapCmp extends React.Component {
         return paths.map((it, index) => <Path slayer={this.state.pathsLayer} key={"path-" + index} path={it}/>)
     }
 
-
     render() {
-        const {marks, paths, centerCoords, computeCenter, zoom} = this.props;
-        const {sMap, lastCenter, lastZoom, lastComputedCenter} = this.state;
-        const {SMap} = window;
-
-        if (sMap && !computeCenter) {
-            const newCenter = SMap.Coords.fromWGS84(centerCoords[0], centerCoords[1]);
-            if (lastCenter !== newCenter) {
-                sMap.setCenter(newCenter, true);
-                this.setState((state) => {
-                    return {...state, lastCenter: newCenter};
-                })
-            }
-        }
-
-        if (sMap && !computeCenter) {
-            if (lastZoom !== zoom) {
-                sMap.setZoom(zoom, true);
-                this.setState((state) => {
-                    return {...state, lastZoom: zoom};
-                })
-            }
-        }
-
-
-        if (sMap && computeCenter) {
-            const points = (marks || []).map(it => SMap.Coords.fromWGS84(it.x, it.y));
-            const rest = sMap.computeCenterZoom(points);
-            if (lastComputedCenter.center !== rest[0] || lastComputedCenter.zoom !== rest[1]) {
-                sMap.setCenterZoom(...rest, true);
-                this.setState((state) => {
-                    return {...state, lastComputedCenter: {center: rest[0], zoom: rest[1]}};
-                })
-            }
-        }
+        const {marks, paths} = this.props;
+        const {sMap} = this.state;
 
         return (
             <div style={{width: "inherit", height: "inherit"}} ref={this.onComponentMount.bind(this)}>
