@@ -5,10 +5,10 @@ import * as React from "react";
 import Map from "./Map";
 
 const defaultProps = {
-    zoom: 8,
+    zoom: {key: "-default-", value: 8},
     width: "inherit",
     height: "inherit",
-    center: {x: 16.606196318054202, y: 49.1822236321112}
+    center: {x: 16.606196318054202, y: 49.1822236321112, key: "-default-"}
 };
 
 const MapCz = (props) => {
@@ -22,7 +22,7 @@ const MapCz = (props) => {
     const w = width || defaultProps.width;
     const h = height || defaultProps.height;
     const c = center || defaultProps.center;
-    const cmpCenter = computeCenter!==undefined
+    const cmpCenter = computeCenter !== undefined
 
 
     // const { marks, paths} = this.props;

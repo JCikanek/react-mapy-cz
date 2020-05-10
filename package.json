@@ -1,6 +1,6 @@
 {
     "name": "mapcz",
-    "version": "1.0.10",
+    "version": "1.0.13",
     "description": "Seznam mapy component",
     "main": "./lib/MapCz.js",
     "license": "MIT",
@@ -27,7 +27,7 @@
         "prop-types": "^15.6.0",
         "react": "^16.0.0",
         "react-dom": "^16.0.0",
-        "webpack": "^4.5.0",
+        "webpack": "^4.43.0",
         "webpack-cli": "^3.2.1"
     }
 }
