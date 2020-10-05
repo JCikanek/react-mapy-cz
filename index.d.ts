@@ -29,9 +29,6 @@ export interface AppProps {
     width?: string;
     height?: string
     computeCenter?: boolean;
-    onComputeCenterUpdated?: () => void;
-    onCenterUpdated: () => void;
-    onZoomUpdated: () => void;
 }
 
 

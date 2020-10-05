@@ -27,6 +27,7 @@ class MapCmp extends React.Component {
 
         this.onComponentMount = this.onComponentMount.bind(this);
         this.updateMapProps = this.updateMapProps.bind(this);
+        this.click =this.click.bind(this);
     }
 
     onComponentMount(node) {
@@ -100,7 +101,7 @@ class MapCmp extends React.Component {
 
         const mouse = new window.SMap.Control.Mouse(window.SMap.MOUSE_PAN | window.SMap.MOUSE_WHEEL | window.SMap.MOUSE_ZOOM);
         sMap.addControl(mouse);
-        sMap.getSignals().addListener(window, "map-click", this.click.bind(this));
+        sMap.getSignals().addListener(window, "map-click", this.click);
 
 
         const paths = new window.SMap.Layer.Geometry();
@@ -120,6 +121,10 @@ class MapCmp extends React.Component {
         this.setState(st);
     }
 
+    componentDidMount() {
+      const {sMap} = this.state;
+        // sMap.getSignals().addListener(window, "map-click", this.click);
+    }
 
     click(e) {
         const m = this.state.sMap;

@@ -1,6 +1,6 @@
 {
     "name": "mapcz",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "description": "Seznam mapy component",
     "main": "./lib/MapCz.js",
     "license": "MIT",
