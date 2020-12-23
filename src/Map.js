@@ -137,10 +137,12 @@ class MapCmp extends React.Component {
 
 
     renderMarks(marks) {
+        console.log("Marks",marks)
         if (!marks) {
             return undefined;
         }
-        return marks.map((it, index) => <Marker slayer={this.state.markerLayer} key={index + "-" + it.x + "-" + it.y}
+        return marks.map((it, index) => <Marker slayer={this.state.markerLayer}
+                                                key={it.key || index + "-" + it.x + "-" + it.y}
                                                 x={it.x}
                                                 y={it.y}
                                                 markerImg={it.markerImg}

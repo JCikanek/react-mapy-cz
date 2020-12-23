@@ -18,6 +18,7 @@ class Marker extends React.Component {
     }
 
     createMarker(coords, img, value) {
+
         const marker = (img || defaultMarker);
 
         const markerDiv = JAK.mel("div");

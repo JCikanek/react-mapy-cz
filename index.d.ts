@@ -11,6 +11,7 @@ export interface MapCenterPoint extends MapPoint {
 }
 
 export interface MarkerPoint extends MapPoint {
+    key:string;
     value?: string;
     markerImg?: string;
     onPointerClick?: (x: number, y: number) => void;
